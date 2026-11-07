@@ -1,96 +1,96 @@
-const students = [
+// const students = [
 
-    {
+//     {
 
-        "id": 1,
+//         "id": 1,
 
-        "name": "Ivan Petrenko",
+//         "name": "Ivan Petrenko",
 
-        "age": 15,
+//         "age": 15,
 
-        "course": "Web Development",
+//         "course": "Web Development",
 
-        "skills": ["HTML", "CSS", "JavaScript"],
+//         "skills": ["HTML", "CSS", "JavaScript"],
 
-        "email": "ivan.petrenko@example.com",
+//         "email": "ivan.petrenko@example.com",
 
-        "isEnrolled": true
+//         "isEnrolled": true
 
-    },
+//     },
 
-    {
+//     {
 
-        "id": 2,
+//         "id": 2,
 
-        "name": "Olha Kovalenko",
+//         "name": "Olha Kovalenko",
 
-        "age": 16,
+//         "age": 16,
 
-        "course": "Game Development",
+//         "course": "Game Development",
 
-        "skills": ["C#", "Unity"],
+//         "skills": ["C#", "Unity"],
 
-        "email": "olha.kovalenko@example.com",
+//         "email": "olha.kovalenko@example.com",
 
-        "isEnrolled": true
+//         "isEnrolled": true
 
-    },
+//     },
 
-    {
+//     {
 
-        "id": 3,
+//         "id": 3,
 
-        "name": "Dmytro Shevchenko",
+//         "name": "Dmytro Shevchenko",
 
-        "age": 14,
+//         "age": 14,
 
-        "course": "Mobile App Development",
+//         "course": "Mobile App Development",
 
-        "skills": ["Java", "Kotlin", "Android Studio"],
+//         "skills": ["Java", "Kotlin", "Android Studio"],
 
-        "email": "dmytro.shevchenko@example.com",
+//         "email": "dmytro.shevchenko@example.com",
 
-        "isEnrolled": false
+//         "isEnrolled": false
 
-    },
+//     },
 
-    {
+//     {
 
-        "id": 4,
+//         "id": 4,
 
-        "name": "Anastasia Ivanova",
+//         "name": "Anastasia Ivanova",
 
-        "age": 17,
+//         "age": 17,
 
-        "course": "Data Science",
+//         "course": "Data Science",
 
-        "skills": ["Python", "Pandas", "Machine Learning"],
+//         "skills": ["Python", "Pandas", "Machine Learning"],
 
-        "email": "anastasia.ivanova@example.com",
+//         "email": "anastasia.ivanova@example.com",
 
-        "isEnrolled": true
+//         "isEnrolled": true
 
-    },
+//     },
 
-    {
+//     {
 
-        "id": 5,
+//         "id": 5,
 
-        "name": "Mykola Bondarenko",
+//         "name": "Mykola Bondarenko",
 
-        "age": 15,
+//         "age": 15,
 
-        "course": "Cybersecurity",
+//         "course": "Cybersecurity",
 
-        "skills": ["Networking", "Ethical Hacking", "Linux"],
+//         "skills": ["Networking", "Ethical Hacking", "Linux"],
 
-        "email": "mykola.bondarenko@example.com",
+//         "email": "mykola.bondarenko@example.com",
 
-        "isEnrolled": true
+//         "isEnrolled": true
 
-    }
+//     }
 
-]
+// ]
 
 const students_table_tBody = document.querySelector("#students_table_tBody");
 const get_students_btn = document.querySelector("#get-students-btn");
@@ -105,12 +105,18 @@ const createSt_elements = {
 
 
 function getStudents() {
-    console.log(students);
-    return students
+    return fetch(`https://6acbba18ef37b15040782799.mockapi.io/students`).then((response) => {
+        if(!response.ok) {
+            throw new Error(response.status)
+        };
+        return response.json()
+    }).then((data) => {
+        renderStudents(data)
+    })
 }
 getStudents()
-function renderStudents(students) {
-    const html =  students.map(({id, name, course, age, skills, email}) => {
+function renderStudents(data) {
+    const html =  data.map(({id, name, course, age, skills, email}) => {
         
         return `<tr class="table_student" id="${id}">
           <td class="table_student_info">${id}</td>
@@ -134,32 +140,33 @@ function renderStudents(students) {
 };
 
 get_students_btn.addEventListener("click", (e) => {
-    renderStudents(getStudents())
+    getStudents()
 })
 
-function addStudent(data) {
-    students.push(data);
-    renderStudents(getStudents())
-}
+// function addStudent(data) {
+//     students.push(data);
+//     getStudents()
+// }
 
-add_student_form.addEventListener("submit", (e) => {
-    const form_data = new FormData(add_student_form)
-    const formData_name = form_data.get("name");
-    const formData_age = form_data.get("age");
-    const formData_course = form_data.get("course");
-    const formData_skills = form_data.get("skills");
-    const formData_email = form_data.get("email")
+// add_student_form.addEventListener("submit", (e) => {
+//     const form_data = new FormData(add_student_form)
+//     const formData_name = form_data.get("name");
+//     const formData_age = form_data.get("age");
+//     const formData_course = form_data.get("course");
+//     const formData_skills = form_data.get("skills");
+//     const formData_email = form_data.get("email")
    
-    const student = {
-        name: formData_name,
-        age: formData_age,
-        skills: formData_skills.split(","),
-        course: formData_course,
-        email: formData_email,
-        id: Math.floor(Math.random() * 1000)
-    };
+//     const student = {
+//         name: formData_name,
+//         age: formData_age,
+//         skills: formData_skills.split(","),
+//         course: formData_course,
+//         email: formData_email,
+//         id: Math.floor(Math.random() * 1000),
+//         isEnrolled: true,
+//     };
 
-    e.preventDefault()
+//     e.preventDefault()
 
-    addStudent(student)
-})
+//     addStudent(student)
+// })
