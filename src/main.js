@@ -95,7 +95,9 @@
 const students_table_tBody = document.querySelector("#students_table_tBody");
 const get_students_btn = document.querySelector("#get-students-btn");
 
-const add_student_form = document.querySelector("#add-student-form")
+const add_student_form = document.querySelector("#add-student-form");
+
+const students_table = document.querySelector("#students-table");
 
 const createSt_elements = {
     createNewSt: document.querySelector("#createNewSt"),
@@ -184,5 +186,26 @@ add_student_form.addEventListener("submit", (e) => {
 
     addStudent(student)
 });
+
+async function deleteStudent(id, student) {
+    const response = await fetch(`https://6acbba18ef37b15040782799.mockapi.io/students/${id}`, {
+        method: "DELETE",  
+    });
+
+    student.remove()
+    return response.json()
+} 
+
+students_table.addEventListener("click", async (e) => {
+    if(!e.target.classList.contains("delete_btn")) {
+        return
+    }
+    e.preventDefault()
+    
+    stud_id = e.target.id;
+    stud_st = e.target.closest(".table_student")
+    
+    deleteStudent(stud_id, stud_st)
+})
 
 
