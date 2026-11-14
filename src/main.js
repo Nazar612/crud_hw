@@ -11,17 +11,17 @@ const createSt_elements = {
     isEnrolled: document.querySelector("#isEnrolled")
 }
 
-
-function getStudents() {
-    return fetch(`https://6acbba18ef37b15040782799.mockapi.io/students`).then((response) => {
-        if(!response.ok) {
-            throw new Error(response.status)
-        };
-        return response.json()
-    }).then((data) => {
+async function getStudents() {
+    try {
+        const response = await fetch(`https://6acbba18ef37b15040782799.mockapi.io/students`);
+        const data = await response.json()
         renderStudents(data)
-    })
-}
+        return data
+    } catch (error) {
+        throw new Error(error.status)
+    }
+};
+
 getStudents()
 function renderStudents(data) {
     const html =  data.map(({id, name, course, age, skills, email}) => {
@@ -58,7 +58,7 @@ async function addStudent(data) {
         body: JSON.stringify(data),
         headers: {
             "Content-Type":"application/json"
-        },
+        } 
     });
 
     getStudents()
@@ -94,12 +94,18 @@ add_student_form.addEventListener("submit", (e) => {
 });
 
 async function deleteStudent(id, student) {
-    const response = await fetch(`https://6acbba18ef37b15040782799.mockapi.io/students/${id}`, {
+    try {
+        const response = await fetch(`https://6acbba18ef37b15040782799.mockapi.io/students/${id}`, {
         method: "DELETE",  
     });
 
+    const data = await response.json() 
+
     student.remove()
-    return response.json()
+    return data
+    } catch (error) {
+        throw new Error(error.status)
+    }
 } 
 
 students_table.addEventListener("click", async (e) => {
@@ -114,6 +120,6 @@ students_table.addEventListener("click", async (e) => {
     deleteStudent(stud_id, stud_st)
 })
 
-async function putStudent(id) {
+// async function putStudent(id) {
     
-}
+// }
